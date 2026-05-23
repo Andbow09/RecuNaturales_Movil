@@ -42,7 +42,7 @@ jobs:
 
       - name: Deploy to mobile repo
         run: |
-          git clone https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/TU_USUARIO/TU_REPO_MOVIL mobile-repo
+          git clone https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/Andbow09/RecuNaturales_Movil_APK mobile-repo
           rm -rf mobile-repo/*
           cp out/app-release.apk mobile-repo/ || true
           cd mobile-repo

@@ -3,6 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '/backend/schema/structs/index.dart';
+
+import '/backend/supabase/supabase.dart';
+
 import '/flutter_flow/flutter_flow_util.dart';
 
 import '/index.dart';
@@ -33,17 +37,65 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
-      errorBuilder: (context, state) => HomePageWidget(),
+      errorBuilder: (context, state) => InicioSesionWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) => HomePageWidget(),
+          builder: (context, _) => InicioSesionWidget(),
         ),
         FFRoute(
-          name: HomePageWidget.routeName,
-          path: HomePageWidget.routePath,
-          builder: (context, params) => HomePageWidget(),
+          name: AlumnoWidget.routeName,
+          path: AlumnoWidget.routePath,
+          builder: (context, params) => AlumnoWidget(),
+        ),
+        FFRoute(
+          name: InicioSesionWidget.routeName,
+          path: InicioSesionWidget.routePath,
+          builder: (context, params) => InicioSesionWidget(),
+        ),
+        FFRoute(
+          name: ProfesorWidget.routeName,
+          path: ProfesorWidget.routePath,
+          builder: (context, params) => ProfesorWidget(),
+        ),
+        FFRoute(
+          name: AsignaturaDetalleAlumnoWidget.routeName,
+          path: AsignaturaDetalleAlumnoWidget.routePath,
+          builder: (context, params) => AsignaturaDetalleAlumnoWidget(
+            asignatura: params.getParam<AsignaturaRow>(
+              'asignatura',
+              ParamType.SupabaseRow,
+            ),
+            nota: params.getParam(
+              'nota',
+              ParamType.double,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: AsignaturaDetalleProfesorWidget.routeName,
+          path: AsignaturaDetalleProfesorWidget.routePath,
+          builder: (context, params) => AsignaturaDetalleProfesorWidget(
+            asignatura: params.getParam<AsignaturaRow>(
+              'asignatura',
+              ParamType.SupabaseRow,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: AlumnoDetallesWidget.routeName,
+          path: AlumnoDetallesWidget.routePath,
+          builder: (context, params) => AlumnoDetallesWidget(
+            alumno: params.getParam<UsuarioRow>(
+              'alumno',
+              ParamType.SupabaseRow,
+            ),
+            asignatura: params.getParam<AsignaturaRow>(
+              'asignatura',
+              ParamType.SupabaseRow,
+            ),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -115,6 +167,7 @@ class FFParameters {
     String paramName,
     ParamType type, {
     bool isList = false,
+    StructBuilder<T>? structBuilder,
   }) {
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
@@ -132,6 +185,7 @@ class FFParameters {
       param,
       type,
       isList,
+      structBuilder: structBuilder,
     );
   }
 }
